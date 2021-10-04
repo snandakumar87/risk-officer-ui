@@ -12,7 +12,7 @@ public class VarCalculationRequest {
     private String entityType;
     private String entityId;
     private Double confidence;
-    private List<Accounts> accounts;
+    private List<Account> accounts;
 
     public String getCorrelationId() {
         return correlationId;
@@ -54,11 +54,11 @@ public class VarCalculationRequest {
         this.confidence = confidence;
     }
 
-    public List<Accounts> getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<Accounts> accounts) {
+    public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
 

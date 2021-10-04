@@ -225,7 +225,7 @@ public class HoldingsResource {
         List<Accounts> accountsList = new ArrayList<>();
         accountsList.add(accounts);
         varCalculationRequest.setCorrelationId(String.valueOf(new Random().nextInt()));
-        varCalculationRequest.setAccounts(accountsList);
+        varCalculationRequest.setAccounts(accountList);
         varCalculationRequest.setConfidence(Double.valueOf(confidence));
         varCalculationRequest.setEntityId(id);
         varCalculationRequest.setEntityType(entity);
