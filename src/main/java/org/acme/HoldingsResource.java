@@ -2,6 +2,11 @@ package org.acme;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.state.KeyValueIterator;
+import org.apache.kafka.streams.state.QueryableStoreTypes;
+import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.ietf.jgss.GSSContext;
 import org.jboss.resteasy.annotations.Body;
@@ -22,6 +27,9 @@ public class HoldingsResource {
     @Inject
     @RestClient
     HoldingService holdingService;
+
+    @Inject
+    KafkaStreams streams;
 
     @GET
     @Path("/accounts")
@@ -103,13 +111,13 @@ public class HoldingsResource {
     }
 
     @POST
-    @Path("/confidence/{confidence}/{entity}/{entityId}")
+    @Path("/confidence/{confidence}/{entity}/{entityId}/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void calculateVar(String body, @PathParam("confidence")String confidence, @PathParam("entity") String entity, @PathParam("entityId") String id) throws Exception{
+    public void calculateVar(String body, @PathParam("confidence")String confidence, @PathParam("entity") String entity, @PathParam("entityId") String id, @PathParam("uuid") String uuid) throws Exception{
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, entity, id,false);
-
-        kafkaController.produce(respo.getCorrelationId(),new ObjectMapper().writeValueAsString(respo));
+        respo.setCorrelationId(uuid);
+        kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
 
 //        System.out.println(respo.getResults());
 //        return new ObjectMapper().writeValueAsString(respo.getResults());
@@ -118,12 +126,37 @@ public class HoldingsResource {
 
 
     @POST
-    @Path("/allaccounts/confidence/{confidence}")
+    @Path("/allaccounts/confidence/{confidence}/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void calculateVarForAllAccounts(String body, @PathParam("confidence")String confidence) throws Exception{
+    public void calculateVarForAllAccounts(String body, @PathParam("confidence")String confidence ,@PathParam("uuid") String uuid) throws Exception{
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, null, null,true);
-        kafkaController.produce(respo.getCorrelationId(),new ObjectMapper().writeValueAsString(respo));
+        respo.setCorrelationId(uuid);
+        kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
+    }
+
+    @GET
+    @Path("/var-response/{uuid}")
+    @javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
+    public String getCase(String json,@javax.ws.rs.PathParam("uuid") String customerId) throws JsonProcessingException {
+        Map<String,String> clusterKeyValueMap = new HashMap<>();
+        System.out.println("inside getCase");
+        ReadOnlyKeyValueStore view = streams.store("CountsWindowStore", QueryableStoreTypes.keyValueStore());
+        try (KeyValueIterator<String, String> clusterKeyValueIterator = view.all()) {
+            System.out.println("Approximate Num. of Entries in Infra Table-{}"+ view.approximateNumEntries());
+            while (clusterKeyValueIterator.hasNext()) {
+                KeyValue<String, String> next = clusterKeyValueIterator.next();
+                clusterKeyValueMap.put(next.key, next.value);
+            }
+        } catch (Exception e) {
+            throw new IllegalStateException("Infra Manager State Store not initialized ", e);
+        }
+        System.out.println("customerId"+customerId);
+
+
+        System.out.println(clusterKeyValueMap.get(customerId));
+
+        return "";
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {

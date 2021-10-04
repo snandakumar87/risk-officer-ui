@@ -86,11 +86,12 @@ document.getElementById('allAccounts').checked=false;
   $scope.showAccountDetails = true;
 }
 
+$scope.uuid = uuidv4();
 
 $scope.calculateVar = function() {
 if($scope.showAccountDetails == true) {
    $http({
-        url: baseURL+"/holdings/confidence/"+$scope.confidence+"/"+$scope.entity+"/"+$scope.id,
+        url: baseURL+"/holdings/confidence/"+$scope.confidence+"/"+$scope.entity+"/"+$scope.id+"/"+$scope.uuid,
         method: "POST",
         data: $scope.responseMsg
 
@@ -103,7 +104,7 @@ if($scope.showAccountDetails == true) {
     });
     }else {
    $http({
-        url: baseURL+"/holdings/allaccounts/confidence/"+$scope.confidence,
+        url: baseURL+"/holdings/allaccounts/confidence/"+$scope.confidence+"/"+$scope.uuid,
         method: "POST",
         data: $scope.responseMsg
 
@@ -116,7 +117,19 @@ if($scope.showAccountDetails == true) {
     });
 
     }
+     $http({
+        url: baseURL+"/var-response/"+$scope.uuid,
+        method: "GET"
+
+    })
+    .then(function(response) {
+
+           $scope.varResponse =response.data;
+
+
+    });
 }
+
 });
 
 
