@@ -154,7 +154,7 @@ public class HoldingsResource {
         System.out.println("customerId"+customerId);
 
 
-        System.out.println(clusterKeyValueMap.get(customerId));
+        System.out.println(clusterKeyValueMap.get(null));
 
         return "";
     }
