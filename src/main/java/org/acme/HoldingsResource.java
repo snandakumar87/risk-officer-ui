@@ -31,6 +31,7 @@ public class HoldingsResource {
 
 
     @Inject
+    @RestClient
     PAMService pamService;
 
     @GET
