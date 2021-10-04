@@ -142,7 +142,7 @@ public class HoldingsResource {
         List respList = (ArrayList) respMap.get("process-instance");
         Map processMap = (Map)respList.get(0);
         System.out.println(respMap);
-        String varResponse = pamService.getTasks((String) processMap.get("process-instance-id"));
+        String varResponse = pamService.getTasks(String.valueOf(processMap.get("process-instance-id")));
 
         return varResponse;
     }
