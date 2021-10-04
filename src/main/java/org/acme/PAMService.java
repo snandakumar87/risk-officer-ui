@@ -12,7 +12,7 @@ public interface PAMService {
     @Path("/server/queries/processes/instances/variables/correlationId?status=2")
     @Produces("application/json")
     @ClientHeaderParam(name="Authorization", value="Basic YWRtaW5Vc2VyOlJlZEhhdA==")
-    String getProcess(@javax.ws.rs.QueryParam("varValue") String correlationId);
+    String getProcess(@javax.ws.rs.QueryParam("varValue") String correlationId, @QueryParam("status") int status);
 
 
 
