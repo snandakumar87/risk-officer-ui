@@ -8,6 +8,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Path("/holdings")
@@ -138,8 +139,10 @@ public class HoldingsResource {
         String resp = pamService.getProcess(correlationId,2);
         System.out.println(resp);
         Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
+        List respList = (ArrayList) respMap.get("process-instance");
+        Map processMap = (Map)respList.get(0);
         System.out.println(respMap);
-        String varResponse = pamService.getTasks((String) respMap.get("process-instance-id"));
+        String varResponse = pamService.getTasks((String) processMap.get("process-instance-id"));
 
         return varResponse;
     }
