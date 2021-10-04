@@ -28,8 +28,7 @@ public class HoldingsResource {
     @RestClient
     HoldingService holdingService;
 
-    @Inject
-    KafkaStreams streams;
+
 
     @Inject
     PAMService pamService;
