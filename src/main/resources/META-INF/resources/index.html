@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Banking Corporation</title>
+
+    <!-- PatternFly Styles -->
+    <link rel="stylesheet" href="css/patternfly.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/patternfly-additions.min.css">
+    <link rel="stylesheet" href="css/mystyles.css">
+    <link rel="stylesheet" href="css/patternfly.css">
+    <link rel="stylesheet" href="css/patternfly-additions.min.css">
+    <script src="components/c3/c3.min.js"></script>
+    <script src="components/d3/d3.min.js"></script>
+
+    <!-- Bootstrap base + PatternFly extensions + Your styles -->
+    <link rel="stylesheet" href="css/mystyles.css">
+
+    <!-- JS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/patternfly.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+    <script>
+
+  var taskId;
+  var app = angular.module('myApp', []);
+app.controller('FormController', function($scope,$http) {
+
+  var baseURL = window.location.protocol + '//' + window.location.host;
+
+
+$scope.showAccountDetails = true;
+$scope.allAccountsClicked = function() {
+  if (document.getElementById('allAccounts').checked) {
+        $scope.showAccountDetails = false;
+  } else {
+         $scope.showAccountDetails = true;
+  }
+
+}
+
+$scope.getHoldings = function() {
+
+if($scope.showAccountDetails == true) {
+
+$http({
+        url: baseURL+"/holdings/"+$scope.entity+"/"+$scope.id,
+        method: "GET"
+
+    })
+    .then(function(response) {
+
+           $scope.responseMsg =response.data;
+
+
+    });
+
+
+} else {
+
+$http({
+        url: baseURL+"/holdings/accounts/",
+        method: "GET"
+
+    })
+    .then(function(response) {
+
+           $scope.responseMsg =response.data;
+
+
+    });
+}
+}
+
+$scope.reset = function() {
+
+$scope.entity = null;
+$scope.confidence=null;
+$scope.id=null;
+$scope.responseMsg=null;
+$scope.varValue=null;
+document.getElementById('allAccounts').checked=false;
+  $scope.showAccountDetails = true;
+}
+
+
+$scope.calculateVar = function() {
+if($scope.showAccountDetails == true) {
+   $http({
+        url: baseURL+"/holdings/confidence/"+$scope.confidence+"/"+$scope.entity+"/"+$scope.id,
+        method: "POST",
+        data: $scope.responseMsg
+
+    })
+    .then(function(response) {
+
+           $scope.varValue =response.data;
+
+
+    });
+    }else {
+   $http({
+        url: baseURL+"/holdings/allaccounts/confidence/"+$scope.confidence,
+        method: "POST",
+        data: $scope.responseMsg
+
+    })
+    .then(function(response) {
+
+           $scope.varValue =response.data;
+
+
+    });
+
+    }
+}
+});
+
+
+</script>
+
+
+</head>
+<body id = "productserviceeligibility" class="cards-pf" ng-app="myApp" ng-controller="FormController" >
+
+
+
+<!-- PatternFly Horizontal Nav -->
+<nav class="navbar navbar-default navbar-pf" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">
+            <h2>Acme Corporation</h2>
+
+        </a>
+    </div>
+    <div class="collapse navbar-collapse navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-utility">
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="pficon pficon-user"></span>
+                    Agent Login <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#">Link</a>
+                    </li>
+                    <li>
+                        <a href="#">Another link</a>
+                    </li>
+                    <li>
+                        <a href="#">Something else here</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">More options</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Link</a>
+                            </li>
+                            <li>
+                                <a href="#">Another link</a>
+                            </li>
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Nav header</li>
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">One more separated link</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#">One more separated link</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-primary">
+            <li>
+                <a href="#">Market Risk</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container-fluid container-cards-pf">
+
+
+        <h2>Calculate Value at Risk (VaR) </h2>
+
+            <div class="col-xs-12 col-lg-12 col-md-5">
+                <div class="card-pf">
+                    <div class="card-pf-heading">
+                        <div class="col-xs-12 col-sm-10 col-md-5">
+                            <div class="container-fluid container-cards-pf">
+
+                                <div class="col-xs-10 col-md-11">
+                                    <form name="testForm">
+                                        <div class="form-group">
+
+                                            <div>
+                                                <input type="checkbox" id="allAccounts" name="scales"  ng-click="allAccountsClicked()"
+                                                >
+                                                <label for="allAccounts">All Accounts</label>
+                                            </div>
+
+
+
+                                            <div ng-show="showAccountDetails == true">
+                                            <div class="control-label"><strong>Entity</strong></div>
+                                            <select class="col-lg-12 combobox form-control" ng-model="entity" >
+
+                                                <option value="account">Account</option>
+                                                <option value="desk">Desk</option>
+                                                <option value="enterprise">Enterprise</option>
+
+                                            </select>
+
+                                            <hr/>
+
+                                            <div class="control-label"><strong>ID #</strong></div>
+                                            <input class="col-lg-12  form-control"  name="item" ng-model="id" type="text" >
+                                            </div>
+                                            <hr/>
+                                            <div class="control-label"><strong>Confidence</strong></div>
+                                            <input class="col-lg-12  form-control" name="item" type="text" ng-model="confidence" value="0.99">
+
+                                            <hr/>
+
+                                            <button id="check"  type="button" class="btn btn-primary" ng-click="getHoldings(confidence,id,entity);">Get Holdings</button>
+                                            <button id="reset"  type="button" class="btn btn-primary" ng-click="reset();">Reset</button>
+
+                                            <br/>
+
+
+
+                                        </div>
+
+
+
+                                        <hr/>
+
+
+
+
+                                    </form>
+
+
+
+                        <table class="table table-striped table-bordered table-hover" id="table1" ng-show="responseMsg != null">
+                            <thead>
+                            <tr>
+                                <th>Account Id</th>
+                                <th>Symbol</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+
+
+
+                            </tr>
+                            </thead>
+
+                            <tbody ng-repeat="x in responseMsg">
+
+                            <tr><td>{{x.accountId}}</td><td>{{x.symbol}}</td><td>{{x.description}}</td><td>{{x.quantity}}</td></tr>
+
+                            </tr>
+                            </tbody>
+
+                        </table>
+                                    <div>
+                        <button  type="button" class="btn btn-primary" ng-click="calculateVar();" ng-show="responseMsg != null">Calculate VaR</button>
+                                        <hr/>
+                                        <table class="table table-striped table-bordered table-hover" id="table2" ng-show="varValue != null">
+                                            <thead>
+                                            <tr>
+                                                <th>Account Id</th>
+                                                <th>Value At Risk</th>
+
+                                            </tr>
+                                            </thead>
+
+                                            <tbody ng-repeat="y in varValue">
+
+                                            <tr><td>{{y.id}}</td><td>{{y.valueAtRisk}}</td></tr>
+
+                                            </tr>
+                                            </tbody>
+
+                                        </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                </div>
+
+        </div><!-- /row -->
+        <!-- /row -->
+    </div><!-- /container -->
+
+
+</body>
+</html>
