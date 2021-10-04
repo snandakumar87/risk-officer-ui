@@ -141,6 +141,7 @@ public class HoldingsResource {
     public String getCase(String json,@javax.ws.rs.PathParam("uuid") String customerId) throws JsonProcessingException {
         Map<String,String> clusterKeyValueMap = new HashMap<>();
         System.out.println("inside getCase");
+        streams.start();
         ReadOnlyKeyValueStore view = streams.store("CountsWindowStore", QueryableStoreTypes.keyValueStore());
         try (KeyValueIterator<String, String> clusterKeyValueIterator = view.all()) {
             System.out.println("Approximate Num. of Entries in Infra Table-{}"+ view.approximateNumEntries());
