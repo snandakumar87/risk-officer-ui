@@ -29,4 +29,6 @@ public interface HoldingService {
     VarCalculationResponse calculateVar(VarCalculationRequest body);
 
 
+
+
 }

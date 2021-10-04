@@ -31,6 +31,9 @@ public class HoldingsResource {
     @Inject
     KafkaStreams streams;
 
+    @Inject
+    PAMService pamService;
+
     @GET
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
@@ -138,26 +141,13 @@ public class HoldingsResource {
     @GET
     @Path("/var-response/{uuid}")
     @javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
-    public String getCase(String json,@javax.ws.rs.PathParam("uuid") String customerId) throws JsonProcessingException {
-        Map<String,String> clusterKeyValueMap = new HashMap<>();
-        System.out.println("inside getCase");
-        streams.start();
-        ReadOnlyKeyValueStore view = streams.store("CountsWindowStore", QueryableStoreTypes.keyValueStore());
-        try (KeyValueIterator<String, String> clusterKeyValueIterator = view.all()) {
-            System.out.println("Approximate Num. of Entries in Infra Table-{}"+ view.approximateNumEntries());
-            while (clusterKeyValueIterator.hasNext()) {
-                KeyValue<String, String> next = clusterKeyValueIterator.next();
-                clusterKeyValueMap.put(next.key, next.value);
-            }
-        } catch (Exception e) {
-            throw new IllegalStateException("Infra Manager State Store not initialized ", e);
-        }
-        System.out.println("customerId"+customerId);
+    public String getCase(String json,@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException {
 
+        String resp = pamService.getProcess(correlationId);
+        Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
+        String varResponse = pamService.getTasks((String) respMap.get("process-instance-id"));
 
-        System.out.println(clusterKeyValueMap.get(null));
-
-        return "";
+        return varResponse;
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
