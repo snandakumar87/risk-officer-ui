@@ -24,7 +24,7 @@ import java.util.Map;
 public class KafkaConsumerUtils {
 
 
-    private static final String EVENT_INP_STREAM = "var-calc-response";
+    private static final String EVENT_INP_STREAM = "ui-response";
     public static Map<String,String> custMap = new HashMap<>();
 
 
