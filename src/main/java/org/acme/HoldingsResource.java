@@ -133,10 +133,11 @@ public class HoldingsResource {
     @GET
     @Path("/var-response/{uuid}")
     @javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
-    public String getCase(String json,@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException {
-
+    public String getCase(String json,@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException, InterruptedException {
+        Thread.sleep(2000);
         String resp = pamService.getProcess(correlationId);
         Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
+        System.out.println(respMap);
         String varResponse = pamService.getTasks((String) respMap.get("process-instance-id"));
 
         return varResponse;
