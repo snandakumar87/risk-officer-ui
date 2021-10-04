@@ -110,13 +110,13 @@ public class HoldingsResource {
     @Path("/confidence/{confidence}/{entity}/{entityId}/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void calculateVar(String body, @PathParam("confidence")String confidence, @PathParam("entity") String entity, @PathParam("entityId") String id, @PathParam("uuid") String uuid) throws Exception{
+    public String calculateVar(String body, @PathParam("confidence")String confidence, @PathParam("entity") String entity, @PathParam("entityId") String id, @PathParam("uuid") String uuid) throws Exception{
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, entity, id,false);
         respo.setCorrelationId(uuid);
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
-
-//        System.out.println(respo.getResults());
-//        return new ObjectMapper().writeValueAsString(respo.getResults());
+        Thread.sleep(1000);
+        String resp = getCase(uuid);
+        return resp;
 
     }
 
@@ -125,16 +125,18 @@ public class HoldingsResource {
     @Path("/allaccounts/confidence/{confidence}/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void calculateVarForAllAccounts(String body, @PathParam("confidence")String confidence ,@PathParam("uuid") String uuid) throws Exception{
+    public String calculateVarForAllAccounts(String body, @PathParam("confidence")String confidence ,@PathParam("uuid") String uuid) throws Exception{
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, null, null,true);
         respo.setCorrelationId(uuid);
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
+        Thread.sleep(1000);
+        String resp = getCase(uuid);
+        return resp;
+
     }
 
-    @GET
-    @Path("/var-response/{uuid}")
-    @javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
-    public String getCase(String json,@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException, InterruptedException {
+
+    public String getCase(@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException, InterruptedException {
         Thread.sleep(2000);
         System.out.println("correlationId"+correlationId);
         String resp = pamService.getProcess(correlationId,2);

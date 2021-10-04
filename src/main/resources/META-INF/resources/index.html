@@ -118,17 +118,7 @@ if($scope.showAccountDetails == true) {
     });
 
     }
-     $http({
-        url: baseURL+"/holdings/var-response/"+$scope.uuid,
-        method: "GET"
 
-    })
-    .then(function(response) {
-
-           $scope.varResponse =response.data;
-
-
-    });
 }
 
 });
