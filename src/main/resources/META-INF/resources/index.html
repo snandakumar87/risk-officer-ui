@@ -86,9 +86,10 @@ document.getElementById('allAccounts').checked=false;
   $scope.showAccountDetails = true;
 }
 
-$scope.uuid = uuidv4();
+
 
 $scope.calculateVar = function() {
+$scope.uuid =  ( ( ( 1+Math.random() ) * 0x10000 ) | 0 ).toString( 16 ).substring( 1 );
 if($scope.showAccountDetails == true) {
    $http({
         url: baseURL+"/holdings/confidence/"+$scope.confidence+"/"+$scope.entity+"/"+$scope.id+"/"+$scope.uuid,
