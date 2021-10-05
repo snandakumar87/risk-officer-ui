@@ -133,7 +133,10 @@ public class HoldingsResource {
 
     }
 
-
+    @GET
+    @Path("/results/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String getCase(@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException, InterruptedException {
 
 
@@ -148,9 +151,9 @@ public class HoldingsResource {
 
         Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
         List list = (List) varResMap.get("variable-instance");
-        String returnMap = (String)list.get(0);
-        System.out.println(returnMap);
-        return returnMap;
+        Map returnMap = new ObjectMapper().readValue(list.get(0).toString(),Map.class);
+        System.out.println(returnMap.get("results"));
+        return String.valueOf(returnMap.get("results"));
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
