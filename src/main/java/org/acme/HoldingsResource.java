@@ -115,7 +115,7 @@ public class HoldingsResource {
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, entity, id,false);
         respo.setCorrelationId(uuid);
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
-        Thread.sleep(2000);
+        Thread.sleep(5000);
         String resp = getCase(uuid);
         Map respMap = new ObjectMapper().readValue(resp,Map.class);
         System.out.println(respMap.keySet());
@@ -132,7 +132,7 @@ public class HoldingsResource {
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, null, null,true);
         respo.setCorrelationId(uuid);
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
-        Thread.sleep(5000);
+        Thread.sleep(8000);
         String resp = getCase(uuid);
 
         return new ObjectMapper().writeValueAsString(resp);
