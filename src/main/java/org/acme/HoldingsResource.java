@@ -143,7 +143,7 @@ public class HoldingsResource {
         Thread.sleep(2000);
 
         String resp = pamService.getProcess(correlationId,2);
-
+        System.out.println(resp);
         Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
         List respList = (ArrayList) respMap.get("process-instance");
         Map processMap = (Map)respList.get(0);
