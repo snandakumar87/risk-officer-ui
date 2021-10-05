@@ -141,16 +141,17 @@ public class HoldingsResource {
 
 
     public String getCase(@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException, InterruptedException {
-        Thread.sleep(2000);
+
 
         String resp = pamService.getProcess(correlationId,2);
 
         Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
         List respList = (ArrayList) respMap.get("process-instance");
+        System.out.println(respList);
         Map processMap = (Map)respList.get(0);
 
         String varResponse = pamService.getTasks(String.valueOf(processMap.get("process-instance-id")));
-        System.out.println(varResponse);
+
         Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
         List list = (List) varResMap.get("variable-instance");
         String returnMap = (String)list.get(0);
