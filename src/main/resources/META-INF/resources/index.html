@@ -86,7 +86,19 @@ document.getElementById('allAccounts').checked=false;
   $scope.showAccountDetails = true;
 }
 
+$scope.varResults = function() {
+ $http({
+        url: baseURL+"/holdings/results/"+$scope.uuid,
+        method: "GET"
 
+    })
+    .then(function(response) {
+
+          $scope.varResults =response.data;
+
+
+    });
+}
 
 $scope.calculateVar = function() {
 $scope.uuid =  ( ( ( 1+Math.random() ) * 0x10000 ) | 0 ).toString( 16 ).substring( 1 );
@@ -98,7 +110,7 @@ if($scope.showAccountDetails == true) {
 
     })
     .then(function(response) {
- alert(response.data);
+\
           $scope.resp =response.data;
 
 
@@ -304,7 +316,7 @@ if($scope.showAccountDetails == true) {
                                             </tr>
                                             </thead>
 
-                                            <tbody ng-repeat="y in varValue">
+                                            <tbody ng-repeat="y in varResults">
 
                                             <tr><td>{{y}}</td><td>{{y.valueAtRisk}}</td></tr>
 

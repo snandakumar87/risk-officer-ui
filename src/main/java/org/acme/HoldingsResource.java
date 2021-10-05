@@ -144,19 +144,19 @@ public class HoldingsResource {
 
         Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
         List respList = (ArrayList) respMap.get("process-instance");
-        System.out.println(respList);
+
         Map processMap = (Map)respList.get(0);
 
         String varResponse = pamService.getTasks(String.valueOf(processMap.get("process-instance-id")));
 
-        System.out.println("var"+varResponse);
+
         Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
         List list = (List) varResMap.get("variable-instance");
-        System.out.println("list"+list);
+
         Map returnMap = (Map) list.get(0);
-        System.out.println(returnMap.get("value"));
+
         Map finlMap = new ObjectMapper().readValue(returnMap.get("value").toString(),Map.class);
-        System.out.println(finlMap);
+
         return String.valueOf(finlMap.get("results"));
     }
 
