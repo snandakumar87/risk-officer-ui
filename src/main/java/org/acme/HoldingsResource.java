@@ -149,8 +149,10 @@ public class HoldingsResource {
 
         String varResponse = pamService.getTasks(String.valueOf(processMap.get("process-instance-id")));
 
+        System.out.println("var"+varResponse);
         Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
         List list = (List) varResMap.get("variable-instance");
+        System.out.println("list"+list);
         Map returnMap = (Map) list.get(0);
         System.out.println(returnMap.get("results"));
         return String.valueOf(returnMap.get("results"));
