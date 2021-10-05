@@ -153,7 +153,7 @@ public class HoldingsResource {
         Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
 
 
-        return new ObjectMapper().writeValueAsString(varResMap.get("value"));
+        return new ObjectMapper().writeValueAsString(varResMap.get("variable-instance"));
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
