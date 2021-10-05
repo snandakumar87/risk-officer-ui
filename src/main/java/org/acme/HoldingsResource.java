@@ -134,7 +134,6 @@ public class HoldingsResource {
         Thread.sleep(5000);
         String resp = getCase(uuid);
         Map respMap = new ObjectMapper().readValue(resp,Map.class);
-        System.out.println(respMap.get("results"));
         return new ObjectMapper().writeValueAsString(respMap.get("results"));
 
     }
