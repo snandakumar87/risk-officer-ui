@@ -154,8 +154,10 @@ public class HoldingsResource {
         List list = (List) varResMap.get("variable-instance");
         System.out.println("list"+list);
         Map returnMap = (Map) list.get(0);
-        System.out.println(returnMap.get("results"));
-        return String.valueOf(returnMap.get("results"));
+        System.out.println(returnMap.get("value"));
+        Map finlMap = new ObjectMapper().readValue(returnMap.get("value").toString(),Map.class);
+        System.out.println(finlMap);
+        return String.valueOf(finlMap.get("results"));
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
