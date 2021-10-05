@@ -116,8 +116,9 @@ public class HoldingsResource {
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
         Thread.sleep(1000);
         String resp = getCase(uuid);
-        System.out.println(resp);
-        return resp;
+        Map respMap = new ObjectMapper().readValue(resp,Map.class);
+        System.out.println(respMap.get("results"));
+        return new ObjectMapper().writeValueAsString(respMap.get("results"));
 
     }
 
@@ -132,7 +133,9 @@ public class HoldingsResource {
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
         Thread.sleep(5000);
         String resp = getCase(uuid);
-        return resp;
+        Map respMap = new ObjectMapper().readValue(resp,Map.class);
+        System.out.println(respMap.get("results"));
+        return new ObjectMapper().writeValueAsString(respMap.get("results"));
 
     }
 
