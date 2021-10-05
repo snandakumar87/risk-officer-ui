@@ -293,7 +293,7 @@ if($scope.showAccountDetails == true) {
                                     <div>
                         <button  type="button" class="btn btn-primary" ng-click="calculateVar();" ng-show="responseMsg != null">Calculate VaR</button>
                                         <hr/>
-                                        <table class="table table-striped table-bordered table-hover" id="table2" ng-show="varResponse != null">
+                                        <table class="table table-striped table-bordered table-hover" id="table2" ng-show="varValue != null">
                                             <thead>
                                             <tr>
                                                 <th>Account Id</th>
@@ -302,7 +302,7 @@ if($scope.showAccountDetails == true) {
                                             </tr>
                                             </thead>
 
-                                            <tbody ng-repeat="y in varResponse">
+                                            <tbody ng-repeat="y in varValue">
 
                                             <tr><td>{{y.id}}</td><td>{{y.valueAtRisk}}</td></tr>
 
