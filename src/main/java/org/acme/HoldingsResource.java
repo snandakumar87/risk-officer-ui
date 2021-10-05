@@ -2,6 +2,7 @@ package org.acme;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.kafka.common.protocol.types.Field;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
@@ -134,7 +135,7 @@ public class HoldingsResource {
         Thread.sleep(5000);
         String resp = getCase(uuid);
 
-        return resp;
+        return new ObjectMapper().writeValueAsString(resp);
 
     }
 
@@ -143,7 +144,7 @@ public class HoldingsResource {
         Thread.sleep(2000);
 
         String resp = pamService.getProcess(correlationId,2);
-        System.out.println(resp);
+
         Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
         List respList = (ArrayList) respMap.get("process-instance");
         Map processMap = (Map)respList.get(0);
@@ -151,9 +152,10 @@ public class HoldingsResource {
         String varResponse = pamService.getTasks(String.valueOf(processMap.get("process-instance-id")));
         System.out.println(varResponse);
         Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
-
-
-        return new ObjectMapper().writeValueAsString(varResMap.get("variable-instance"));
+        List list = (List) varResMap.get("variable-instance");
+        String returnMap = (String)list.get(0);
+        System.out.println(returnMap);
+        return returnMap;
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
