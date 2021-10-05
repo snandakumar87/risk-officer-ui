@@ -116,6 +116,7 @@ public class HoldingsResource {
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
         Thread.sleep(1000);
         String resp = getCase(uuid);
+        System.out.println(resp);
         return resp;
 
     }
