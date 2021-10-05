@@ -116,9 +116,8 @@ public class HoldingsResource {
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
         Thread.sleep(1000);
         String resp = getCase(uuid);
-        Map respMap = new ObjectMapper().readValue(resp,Map.class);
-        System.out.println(respMap.keySet());
-        return new ObjectMapper().writeValueAsString(respMap.get("results"));
+
+        return resp;
 
     }
 
@@ -133,8 +132,8 @@ public class HoldingsResource {
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
         Thread.sleep(5000);
         String resp = getCase(uuid);
-        Map respMap = new ObjectMapper().readValue(resp,Map.class);
-        return new ObjectMapper().writeValueAsString(respMap.get("results"));
+
+        return resp;
 
     }
 
@@ -150,7 +149,11 @@ public class HoldingsResource {
 
         String varResponse = pamService.getTasks(String.valueOf(processMap.get("process-instance-id")));
         System.out.println(varResponse);
-        return varResponse;
+        Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
+        List list = (List) varResMap.get("variable-instance");
+        Map returnMap = (Map)list.get(0);
+
+        return new ObjectMapper().writeValueAsString(returnMap.get("value"));
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
