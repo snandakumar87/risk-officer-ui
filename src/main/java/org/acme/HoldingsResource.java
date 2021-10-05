@@ -114,7 +114,7 @@ public class HoldingsResource {
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, entity, id,false);
         respo.setCorrelationId(uuid);
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
-        Thread.sleep(4000);
+        Thread.sleep(1000);
         String resp = getCase(uuid);
         return resp;
 
