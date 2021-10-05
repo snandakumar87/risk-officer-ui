@@ -114,10 +114,11 @@ public class HoldingsResource {
         VarCalculationRequest respo = getVarCalculationResponse(body, confidence, entity, id,false);
         respo.setCorrelationId(uuid);
         kafkaController.produce(uuid,new ObjectMapper().writeValueAsString(respo));
-        Thread.sleep(500);
+        Thread.sleep(1000);
         String resp = getCase(uuid);
-
-        return resp;
+        Map respMap = new ObjectMapper().readValue(resp,Map.class);
+        System.out.println(respMap.keySet());
+        return new ObjectMapper().writeValueAsString(respMap.get("results"));
 
     }
 
@@ -150,10 +151,9 @@ public class HoldingsResource {
         String varResponse = pamService.getTasks(String.valueOf(processMap.get("process-instance-id")));
         System.out.println(varResponse);
         Map varResMap = new ObjectMapper().readValue(varResponse,Map.class);
-        List list = (List) varResMap.get("variable-instance");
-        Map returnMap = (Map)list.get(0);
-        String valueMap = (String) returnMap.get("value");
-        return valueMap;
+
+
+        return new ObjectMapper().writeValueAsString(varResMap.get("value"));
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
