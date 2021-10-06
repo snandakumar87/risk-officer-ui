@@ -157,7 +157,7 @@ public class HoldingsResource {
 
         Map finlMap = new ObjectMapper().readValue(returnMap.get("value").toString(),Map.class);
 
-        return String.valueOf(finlMap.get("results"));
+        return new ObjectMapper().writeValueAsString(finlMap.get("results"));
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
