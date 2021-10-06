@@ -154,9 +154,9 @@ public class HoldingsResource {
         List list = (List) varResMap.get("variable-instance");
 
         Map returnMap = (Map) list.get(0);
-
+        System.out.println(returnMap);
         Map finlMap = new ObjectMapper().readValue(returnMap.get("value").toString(),Map.class);
-
+        System.out.println(finlMap.get("results"));
         return new ObjectMapper().writeValueAsString(finlMap.get("results"));
     }
 
