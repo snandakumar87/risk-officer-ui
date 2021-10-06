@@ -94,7 +94,7 @@ $scope.varResults = function() {
     })
     .then(function(response) {
 
-          $scope.varResults =response.data;
+          $scope.varResult =response.data;
 
 
     });
@@ -316,9 +316,9 @@ if($scope.showAccountDetails == true) {
                                             </tr>
                                             </thead>
 
-                                            <tbody ng-repeat="y in varResults">
+                                            <tbody ng-repeat="y in varResult">
 
-                                            <tr><td>{{y}}</td><td>{{y.valueAtRisk}}</td></tr>
+                                            <tr><td>{{y.id}}</td><td>{{y.valueAtRisk}}</td></tr>
 
                                             </tr>
                                             </tbody>
