@@ -17,7 +17,7 @@ public interface PAMService {
 
 
     @GET
-    @Path("/server/containers/risk-analytics-orchestrator_1.0.0-SNAPSHOT/processes/instances/{processId}/variables/instances/responseStr")
+    @Path("/server/containers/risk-analytics-orchestrator_1.0.0-SNAPSHOT/processes/instances/{processId}/variables/instances/resultValMap")
     @Produces("application/json")
     @ClientHeaderParam(name="Authorization", value="Basic YWRtaW5Vc2VyOlJlZEhhdA==")
     String getTasks(@PathParam("processId") String processId);
