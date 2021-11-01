@@ -316,9 +316,9 @@ if($scope.showAccountDetails == true) {
                                             </tr>
                                             </thead>
 
-                                            <tbody ng-repeat="(key,value) in varResult track by $index">
+                                            <tbody ng-repeat="y in varResult">
 
-                                            <tr><td>{{key}}</td><td>{{value}}</td></tr>
+                                            <tr><td>{{y.id}}</td><td>{{y.valueAtRisk}}</td></tr>
 
                                             </tr>
                                             </tbody>
