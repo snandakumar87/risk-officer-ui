@@ -155,11 +155,12 @@ public class HoldingsResource {
 
         Map returnMap = (Map) list.get(0);
 
-        Map valueRes = (Map) returnMap.get("value");
+        String valueRes = (String) returnMap.get("value");
 
-        System.out.println(valueRes);
+        Map valMap = new ObjectMapper().readValue(valueRes,Map.class);
+        System.out.println(valMap);
 
-        return valueRes;
+        return valMap;
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
