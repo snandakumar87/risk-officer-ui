@@ -158,7 +158,7 @@ public class HoldingsResource {
         String valueRes = (String) returnMap.get("value");
 
         Map valMap = new ObjectMapper().readValue(valueRes,Map.class);
-        System.out.println(valMap);
+        System.out.println(new ObjectMapper().writeValueAsString(valMap));
 
         return new ObjectMapper().writeValueAsString(valMap);
     }
