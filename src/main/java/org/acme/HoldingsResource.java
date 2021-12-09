@@ -138,9 +138,12 @@ public class HoldingsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public String getCase(@javax.ws.rs.PathParam("uuid") String correlationId) throws JsonProcessingException, InterruptedException {
-
-
+        List<VarResponse> varResponses = new ArrayList<>();
+        try{
+        System.out.println(correlationId);
         String resp = pamService.getProcess(correlationId,2);
+        System.out.println("resp"+resp);
+
 
         Map respMap = new ObjectMapper().readValue(resp,HashMap.class);
         List respList = (ArrayList) respMap.get("process-instance");
@@ -155,10 +158,29 @@ public class HoldingsResource {
 
         Map returnMap = (Map) list.get(0);
         System.out.println(returnMap);
-        Map finlMap = new ObjectMapper().readValue(returnMap.get("value").toString(),Map.class);
-        System.out.println(finlMap.get("results"));
-        return new ObjectMapper().writeValueAsString(finlMap.get("results"));
+        String finlMap = (String)returnMap.get("value");
 
+        String mapString = finlMap.substring(1,finlMap.length()-2);
+        String map[] = mapString.split(",");
+
+
+        VarResponse varResponse1 = null;
+        String stringPattern[] = null;
+        for(String obj: map) {
+            stringPattern = obj.split("=");
+            varResponse1 = new VarResponse();
+            varResponse1.setEntityId(stringPattern[0]);
+            varResponse1.setVarResults(stringPattern[1]);
+            varResponses.add(varResponse1);
+        }
+
+        System.out.println(new ObjectMapper().writeValueAsString(varResponses));
+
+
+        }catch (Exception e) {
+
+        }
+        return new ObjectMapper().writeValueAsString(varResponses);
     }
 
     private List<AccountObject>  parseResponse(List<AccountObject> holdingsResponse, Map map) {
